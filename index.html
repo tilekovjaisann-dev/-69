@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head> <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AkylFin AI — Личный финансовый ассистент</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<script src="script.js"></script>
+<script src="script.js"></script>
+<body>
+
+  <!-- ===== ШАПКА ===== -->
+  <header class="header">
+    <div class="container">
+      <div class="header__logo">
+        <span class="header__icon">💡</span>
+        <h1 class="header__title">AkylFin <span class="accent">AI</span></h1>
+      </div>
+      <p class="header__subtitle">Личный AI-ассистент по финансам для школьников и студентов</p>
+      <p class="header__description">
+        Введи свои доходы и расходы — AkylFin рассчитает твой бюджет,
+        оценит финансовую ситуацию и даст персональный совет.
+      </p>
+    </div>
+  </header>
+
+  <!-- ===== ОСНОВНОЙ КОНТЕНТ ===== -->
+  <main class="main">
+    <div class="container">
+
+      <!-- ===== БЛОК ВВОДА ДАННЫХ ===== -->
+      <section class="card" id="input-section">
+        <h2 class="card__title">📊 Финансовые данные</h2>
+
+        <!-- Сообщение об ошибке валидации -->
+        <div class="error-message hidden" id="error-message">
+          <span class="error-icon">⚠️</span>
+          <span id="error-text">Ошибка</span>
+        </div>
+
+        <div class="form-grid">
+
+          <!-- Доход -->
+          <div class="form-group form-group--full">
+           <label class="form-label" for="income">
+             💰 Ежемесячный доход (сом)
+            </label>
+            <input
+              class="form-input"
+              type="number"
+              id="income"
+              placeholder="Например: 50000"
+              min="0"
+            />
+          </div>
+
+          <!-- Расходы -->
+          <div class="form-group">
+            <label class="form-label" for="expense-food">🍔 Еда</label>
+            <input
+              class="form-input"
+              type="number"
+              id="expense-food"
+              placeholder="Например: 12000"
+              min="0"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="expense-transport">🚌 Транспорт</label>
+            <input
+              class="form-input"
+              type="number"
+              id="expense-transport"
+              placeholder="Например: 5000"
+              min="0"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="expense-phone">📱 Связь</label>
+            <input
+              class="form-input"
+              type="number"
+              id="expense-phone"
+              placeholder="Например: 2000"
+              min="0"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="expense-fun">🎮 Развлечения</label>
+            <input
+              class="form-input"
+              type="number"
+              id="expense-fun"
+              placeholder="Например: 5000"
+              min="0"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="expense-edu">📚 Обучение</label>
+            <input
+              class="form-input"
+              type="number"
+              id="expense-edu"
+              placeholder="Например: 8000"
+              min="0"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="expense-other">📦 Другое</label>
+            <input
+              class="form-input"
+              type="number"
+              id="expense-other"
+              placeholder="Например: 3000"
+              min="0"
+            />
+          </div>
+
+          <!-- Финансовая цель -->
+          <div class="form-group form-group--full divider-top">
+            <label class="form-label" for="goal-name">🎯 Финансовая цель</label>
+            <input
+              class="form-input"
+              type="text"
+              id="goal-name"
+              placeholder="Например: Ноутбук, Телефон, Курсы"
+            />
+          </div>
+
+          <div class="form-group form-group--full">
+            <label class="form-label" for="goal-cost">💵 Стоимость цели (сом)</label>
+            <input
+              class="form-input"
+              type="number"
+              id="goal-cost"
+              placeholder="Например: 150000"
+              min="0"
+            />
+          </div>
+
+        </div>
+
+        <!-- ===== КНОПКИ ===== -->
+        <div class="buttons-row">
+          <button class="btn btn--primary" id="btn-calculate" onclick="handleCalculate()">
+            🧮 Рассчитать
+          </button>
+          <button class="btn btn--secondary" id="btn-advice" onclick="handleShowAdvice()">
+            🤖 Совет AI
+          </button>
+          <button class="btn btn--outline" id="btn-example" onclick="handleFillExample()">
+            📋 Пример
+          </button>
+          <button class="btn btn--danger" id="btn-clear" onclick="handleClear()">
+            🗑️ Очистить
+          </button>
+        </div>
+
+      </section>
+
+      <!-- ===== БЛОК РЕЗУЛЬТАТА ===== -->
+      <section class="card" id="result-section">
+        <h2 class="card__title">📈 Результат</h2>
+
+        <!-- Пустой стартовый экран -->
+        <div class="result-empty" id="result-empty">
+          <div class="result-empty__icon">📂</div>
+          <p class="result-empty__text">Введи данные и нажми «Рассчитать»</p>
+          <p class="result-empty__hint">Результат появится здесь</p>
+        </div>
+
+        <!-- Результаты расчёта (скрыто до нажатия) -->
+        <div class="result-content hidden" id="result-content">
+
+          <div class="result-grid">
+            <div class="result-item">
+              <span class="result-item__label">💰 Доход</span>
+              <span class="result-item__value" id="res-income">—</span>
+            </div>
+            <div class="result-item">
+              <span class="result-item__label">💸 Расходы</span>
+              <span class="result-item__value result-item__value--negative" id="res-expenses">—</span>
+            </div>
+            <div class="result-item result-item--highlight">
+              <span class="result-item__label">🏦 Остаток</span>
+              <span class="result-item__value" id="res-balance">—</span>
+            </div>
+            <div class="result-item">
+              <span class="result-item__label">📅 Рекомендуемое накопление/мес.</span>
+              <span class="result-item__value result-item__value--accent" id="res-saving">—</span>
+            </div>
+          </div>
+
+          <div class="result-goal" id="result-goal-block">
+            <div class="result-goal__info">
+              <span class="result-goal__label">🎯 Цель:</span>
+              <span class="result-goal__name" id="res-goal-name">—</span>
+            </div>
+            <div class="result-goal__info">
+              <span class="result-goal__label">⏳ До цели:</span>
+              <span class="result-goal__months" id="res-goal-months">—</span>
+            </div>
+          </div>
+
+          <div class="status-badge" id="status-badge">
+            <span id="status-icon">⚪</span>
+            <span id="status-text">—</span>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===== БЛОК AI-СОВЕТА ===== -->
+      <section class="card card--ai" id="advice-section">
+        <h2 class="card__title">🤖 Совет от AkylFin AI</h2>
+
+        <div class="advice-empty" id="advice-empty">
+          <p>Нажми «Совет AI» или «Рассчитать», чтобы получить персональный совет</p>
+        </div>
+
+        <div class="advice-content hidden" id="advice-content">
+          <div class="advice-bubble" id="advice-text">
+            <!-- Текст совета вставляется сюда -->
+          </div>
+          <div class="advice-tips" id="advice-tips">
+            <!-- Конкретные советы вставляются сюда -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== МИНи-ЧАТ ===== -->
+      <section class="card" id="chat-section">
+        <h2 class="card__title">💬 Спроси AkylFin</h2>
+        <p class="card__hint">Задай вопрос — ассистент ответит на основе твоих данных</p>
+
+        <div class="chat-box" id="chat-box">
+          <div class="chat-message chat-message--bot">
+            <span class="chat-avatar">🤖</span>
+            <div class="chat-bubble">
+              Привет! Я AkylFin AI. Введи свои данные и задай мне вопрос о финансах. 
+              Например: <em>«Как накопить быстрее?»</em> или <em>«Что делать если расходы больше дохода?»</em>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-input-row">
+          <input
+            class="form-input chat-input"
+            type="text"
+            id="chat-input"
+            placeholder="Введи вопрос..."
+            onkeydown="handleChatKeydown(event)"
+          />
+          <button class="btn btn--primary chat-send-btn" onclick="handleChatSend()">
+            Спросить ➤
+          </button>
+        </div>
+
+        <div class="chat-suggestions">
+          <p class="chat-suggestions__label">Попробуй спросить:</p>
+          <div class="chat-suggestions__list">
+            <button class="suggestion-chip" onclick="askSuggestion('Как накопить быстрее?')">Как накопить быстрее?</button>
+            <button class="suggestion-chip" onclick="askSuggestion('Почему мало денег остаётся?')">Почему мало денег?</button>
+            <button class="suggestion-chip" onclick="askSuggestion('Смогу ли я накопить на цель?')">Смогу накопить на цель?</button>
+            <button class="suggestion-chip" onclick="askSuggestion('Как сократить расходы?')">Как сократить расходы?</button>
+            <button class="suggestion-chip" onclick="askSuggestion('Что делать если расходы больше дохода?')">Расходы больше дохода?</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ===== ФУТЕР ===== -->
+  <footer class="footer">
+    <div class="container">
+      <p>AkylFin AI · Хакатон FIN-FUTURE 2026 · Прототип</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
